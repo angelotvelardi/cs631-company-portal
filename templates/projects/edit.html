@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Edit Project{% endblock %}
+
+{% block content %}
+<h1>Edit Project #{{ project.Project_Number }}</h1>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Project Number (PK)</label>
+    <input type="text" class="form-control" value="{{ project.Project_Number }}" disabled>
+  </div>
+
+  <div class="mb-3">
+    <label for="Budget" class="form-label">Budget</label>
+    <input type="number" step="0.01" class="form-control" id="Budget" name="Budget"
+           value="{{ project.Budget or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Date_Started" class="form-label">Start Date</label>
+    <input type="date" class="form-control" id="Date_Started" name="Date_Started"
+           value="{{ project.Date_Started }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Date_Ended" class="form-label">End Date</label>
+    <input type="date" class="form-control" id="Date_Ended" name="Date_Ended"
+           value="{{ project.Date_Ended }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Department_Name" class="form-label">Department</label>
+    <select class="form-select" id="Department_Name" name="Department_Name" required>
+      {% for d in departments %}
+        <option value="{{ d.Department_Name }}"
+          {% if project.Department_Name == d.Department_Name %}selected{% endif %}>
+          {{ d.Department_Name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="Manager_Emp_No" class="form-label">Manager</label>
+    <select class="form-select" id="Manager_Emp_No" name="Manager_Emp_No" required>
+      {% for e in employees %}
+        <option value="{{ e.Employee_No }}"
+          {% if project.Manager_Emp_No == e.Employee_No %}selected{% endif %}>
+          {{ e.Employee_Name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{{ url_for('projects.list_projects') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

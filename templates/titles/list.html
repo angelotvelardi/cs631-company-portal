@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Employee Titles{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Employee Titles</h1>
+  <a class="btn btn-primary" href="{{ url_for('titles.create_title') }}">
+    + New Title
+  </a>
+</div>
+
+{% if titles %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Salary</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in titles %}
+        <tr>
+          <td>{{ t.Title }}</td>
+          <td>{{ t.Salary or '-' }}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-secondary"
+               href="{{ url_for('titles.edit_title', title_name=t.Title) }}">
+              Edit
+            </a>
+            <form method="post"
+                  action="{{ url_for('titles.delete_title', title_name=t.Title) }}"
+                  onsubmit="return confirm('Delete this title? Employees using it will fail FK constraints.');">
+              <button type="submit" class="btn btn-sm btn-danger">
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No titles defined yet.</p>
+{% endif %}
+{% endblock %}

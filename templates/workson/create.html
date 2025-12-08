@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Create Assignment{% endblock %}
+
+{% block content %}
+<h1>Assign Employee to Project</h1>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label for="Employee_No" class="form-label">Employee</label>
+    <select class="form-select" id="Employee_No" name="Employee_No" required>
+      <option value="">-- Select Employee --</option>
+      {% for e in employees %}
+        <option value="{{ e.Employee_No }}">{{ e.Employee_Name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="Project_Number" class="form-label">Project</label>
+    <select class="form-select" id="Project_Number" name="Project_Number" required>
+      <option value="">-- Select Project --</option>
+      {% for p in projects %}
+        <option value="{{ p.Project_Number }}">{{ p.Project_Number }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="Time_Spent" class="form-label">Time Spent</label>
+    <input type="number" step="0.01" class="form-control" id="Time_Spent" name="Time_Spent">
+  </div>
+
+  <div class="mb-3">
+    <label for="Role" class="form-label">Role</label>
+    <input type="text" class="form-control" id="Role" name="Role">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create</button>
+  <a href="{{ url_for('workson.list_workson') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

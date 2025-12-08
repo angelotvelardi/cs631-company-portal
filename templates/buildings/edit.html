@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Edit Building{% endblock %}
+
+{% block content %}
+<h1>Edit Building: {{ building.Building_Code }}</h1>
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Building Code (PK)</label>
+    <input type="text" class="form-control" value="{{ building.Building_Code }}" disabled>
+  </div>
+
+  <div class="mb-3">
+    <label for="Name" class="form-label">Name</label>
+    <input type="text" class="form-control" id="Name" name="Name"
+           value="{{ building.Name or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Year_Bought" class="form-label">Year Bought</label>
+    <input type="number" class="form-control" id="Year_Bought" name="Year_Bought"
+           value="{{ building.Year_Bought or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Cost" class="form-label">Cost</label>
+    <input type="number" step="0.01" class="form-control" id="Cost" name="Cost"
+           value="{{ building.Cost or '' }}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{{ url_for('buildings.list_buildings') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

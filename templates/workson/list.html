@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Assignments{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Employee–Project Assignments</h1>
+  <a class="btn btn-primary" href="{{ url_for('workson.create_workson') }}">
+    + New Assignment
+  </a>
+</div>
+
+{% if rows %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Employee</th>
+        <th>Project #</th>
+        <th>Time Spent</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for w, emp, proj in rows %}
+        <tr>
+          <td>{{ emp.Employee_Name }}</td>
+          <td>{{ proj.Project_Number }}</td>
+          <td>{{ w.Time_Spent or '-' }}</td>
+          <td>{{ w.Role or '-' }}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-secondary"
+               href="{{ url_for('workson.edit_workson',
+                                employee_no=w.Employee_No,
+                                project_number=w.Project_Number) }}">
+              Edit
+            </a>
+            <form method="post"
+                  action="{{ url_for('workson.delete_workson',
+                                     employee_no=w.Employee_No,
+                                     project_number=w.Project_Number) }}"
+                  onsubmit="return confirm('Delete this assignment?');">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No assignments yet.</p>
+{% endif %}
+{% endblock %}

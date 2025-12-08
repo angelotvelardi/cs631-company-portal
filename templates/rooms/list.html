@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Rooms{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Rooms</h1>
+  <a class="btn btn-primary" href="{{ url_for('rooms.create_room') }}">
+    + New Room
+  </a>
+</div>
+
+{% if rooms %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Room Number</th>
+        <th>Building</th>
+        <th>Department</th>
+        <th>Square Feet</th>
+        <th>Type</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for room, building, dept in rooms %}
+        <tr>
+          <td>{{ room.Room_Number }}</td>
+          <td>{{ building.Building_Code }} - {{ building.Name or '' }}</td>
+          <td>{{ dept.Department_Name }}</td>
+          <td>{{ room.Square_Feet or '-' }}</td>
+          <td>{{ room.Type or '-' }}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-secondary"
+               href="{{ url_for('rooms.edit_room', room_number=room.Room_Number) }}">
+              Edit
+            </a>
+            <form method="post"
+                  action="{{ url_for('rooms.delete_room', room_number=room.Room_Number) }}"
+                  onsubmit="return confirm('Delete this room?');">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No rooms yet.</p>
+{% endif %}
+{% endblock %}

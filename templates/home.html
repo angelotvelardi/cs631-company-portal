@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Company Portal{% endblock %}
+
+{% block content %}
+  <h1>Welcome</h1>
+  <p>This is the Enterprise Division &amp; Project Management Portal.</p>
+  <p>
+    Start by viewing <a href="{{ url_for('divisions.list_divisions') }}">Divisions</a>.
+  </p>
+{% endblock %}

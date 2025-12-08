@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Employees{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Employees</h1>
+  <a class="btn btn-primary" href="{{ url_for('employees.create_employee') }}">
+    + New Employee
+  </a>
+</div>
+
+{% if employees %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Title</th>
+        <th>Department</th>
+        <th>Division</th>
+        <th>Phone</th>
+        <th>Starting Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for emp, dept, div, title in employees %}
+        <tr>
+          <td>{{ emp.Employee_No }}</td>
+          <td>{{ emp.Employee_Name }}</td>
+          <td>{{ title.Title if title else '-' }}</td>
+          <td>{{ dept.Department_Name if dept else '-' }}</td>
+          <td>{{ div.Division_Name if div else '-' }}</td>
+          <td>{{ emp.Phone_Number or '-' }}</td>
+          <td>{{ emp.Starting_Date or '-' }}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-secondary"
+               href="{{ url_for('employees.edit_employee', employee_no=emp.Employee_No) }}">
+              Edit
+            </a>
+            <form method="post"
+                  action="{{ url_for('employees.delete_employee', employee_no=emp.Employee_No) }}"
+                  onsubmit="return confirm('Delete this employee?');">
+              <button type="submit" class="btn btn-sm btn-danger">
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No employees yet.</p>
+{% endif %}
+{% endblock %}

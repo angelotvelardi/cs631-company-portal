@@ -1,0 +1,50 @@
+# app.py
+from flask import Flask, render_template
+from models import db
+from routes.divisions import bp as divisions_bp
+from routes.departments import bp as departments_bp
+from routes.buildings import bp as buildings_bp
+from routes.rooms import bp as rooms_bp
+from routes.employees import bp as employees_bp
+from routes.projects import bp as projects_bp
+from routes.workson import bp as workson_bp
+from routes.titles import bp as titles_bp
+
+
+
+def create_app():
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = (
+        "postgresql+psycopg2://postgres:cs631@localhost:5432/company_db"
+    )
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.secret_key = "change-this-secret-key"
+
+    db.init_app(app)
+
+    # Register blueprints
+    app.register_blueprint(divisions_bp)
+    app.register_blueprint(departments_bp)
+    app.register_blueprint(buildings_bp)
+    app.register_blueprint(rooms_bp)
+    app.register_blueprint(employees_bp)
+    app.register_blueprint(projects_bp)
+    app.register_blueprint(workson_bp)
+    app.register_blueprint(titles_bp)
+
+
+    @app.route("/")
+    def home():
+        return render_template("home.html")
+
+    with app.app_context():
+        db.create_all()
+
+    return app
+
+
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True)
+

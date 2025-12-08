@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Edit Room{% endblock %}
+
+{% block content %}
+<h1>Edit Room: {{ room.Room_Number }}</h1>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Room Number (PK)</label>
+    <input type="text" class="form-control" value="{{ room.Room_Number }}" disabled>
+  </div>
+
+  <div class="mb-3">
+    <label for="Square_Feet" class="form-label">Square Feet</label>
+    <input type="number" class="form-control" id="Square_Feet" name="Square_Feet"
+           value="{{ room.Square_Feet or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Type" class="form-label">Type</label>
+    <input type="text" class="form-control" id="Type" name="Type"
+           value="{{ room.Type or '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label for="Building_Code" class="form-label">Building</label>
+    <select class="form-select" id="Building_Code" name="Building_Code" required>
+      {% for b in buildings %}
+        <option value="{{ b.Building_Code }}"
+          {% if room.Building_Code == b.Building_Code %}selected{% endif %}>
+          {{ b.Building_Code }} - {{ b.Name or '' }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label for="Department_Name" class="form-label">Department</label>
+    <select class="form-select" id="Department_Name" name="Department_Name" required>
+      {% for d in departments %}
+        <option value="{{ d.Department_Name }}"
+          {% if room.Department_Name == d.Department_Name %}selected{% endif %}>
+          {{ d.Department_Name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save</button>
+  <a href="{{ url_for('rooms.list_rooms') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

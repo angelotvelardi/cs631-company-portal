@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Divisions{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Divisions</h1>
+  <a class="btn btn-primary" href="{{ url_for('divisions.create_division') }}">
+    + New Division
+  </a>
+</div>
+
+{% if divisions %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Division Name</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for division in divisions %}
+        <tr>
+          <td>{{ division.Division_Name }}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-secondary"
+               href="{{ url_for('divisions.edit_division', division_name=division.Division_Name) }}">
+              Edit
+            </a>
+            <form method="post"
+                  action="{{ url_for('divisions.delete_division', division_name=division.Division_Name) }}"
+                  onsubmit="return confirm('Delete this division?');">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% else %}
+  <p>No divisions yet.</p>
+{% endif %}
+{% endblock %}

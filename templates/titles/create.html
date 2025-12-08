@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Create Title{% endblock %}
+
+{% block content %}
+<h1>Create Employee Title</h1>
+
+{% if error %}
+  <div class="alert alert-danger">{{ error }}</div>
+{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label for="Title" class="form-label">Title Name (PK)</label>
+    <input type="text" class="form-control" id="Title" name="Title" required>
+  </div>
+
+  <div class="mb-3">
+    <label for="Salary" class="form-label">Salary</label>
+    <input type="number" step="0.01" class="form-control" id="Salary" name="Salary">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Create</button>
+  <a href="{{ url_for('titles.list_titles') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Create Division{% endblock %}
+
+{% block content %}
+  <h1>Create Division</h1>
+
+  {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+  {% endif %}
+
+  <form method="post">
+    <div class="mb-3">
+      <label for="Division_Name" class="form-label">Division Name</label>
+      <input
+        type="text"
+        class="form-control"
+        id="Division_Name"
+        name="Division_Name"
+        required
+      >
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a href="{{ url_for('divisions.list_divisions') }}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}
