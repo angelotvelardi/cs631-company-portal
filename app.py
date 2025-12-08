@@ -1,4 +1,5 @@
 # app.py
+import os
 from flask import Flask, render_template
 from models import db
 from routes.divisions import bp as divisions_bp
@@ -15,11 +16,10 @@ from routes.titles import bp as titles_bp
 def create_app():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        "postgresql+psycopg2://postgres:cs631@localhost:5432/company_db"
-    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.secret_key = "change-this-secret-key"
+    app.secret_key = os.getenv("SECRET_KEY", "dev-secret-key")
+
 
     db.init_app(app)
 
@@ -43,8 +43,8 @@ def create_app():
 
     return app
 
+app = create_app()
 
 if __name__ == "__main__":
-    app = create_app()
     app.run(debug=True)
 
