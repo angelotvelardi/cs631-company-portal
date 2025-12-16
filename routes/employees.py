@@ -1,6 +1,6 @@
 # routes/employees.py
-from flask import Blueprint, render_template, request, redirect, url_for
-from models import db, Employee, Employee_Title, Department, Division
+from flask import Blueprint, render_template, request, redirect, url_for, flash
+from models import db, Employee, Works_On, Project, Division, Department, TimeEntry, PayrollHistory, ProjectEmployee, Employee_Title
 from datetime import datetime
 
 bp = Blueprint("employees", __name__, url_prefix="/employees")
@@ -158,10 +158,50 @@ def edit_employee(employee_no):
 @bp.route("/<int:employee_no>/delete", methods=["POST"])
 def delete_employee(employee_no):
     emp = Employee.query.get_or_404(employee_no)
-    db.session.delete(emp)
+
+    # ---- BLOCK if employee is referenced in "leadership" roles ----
+    manages_projects = Project.query.filter_by(Manager_Emp_No=employee_no).count() > 0
+    is_div_head = Division.query.filter_by(Head_Emp_No=employee_no).count() > 0
+    is_dept_head = Department.query.filter_by(Head_Emp_No=employee_no).count() > 0
+
+    if manages_projects or is_div_head or is_dept_head:
+        msg_parts = []
+        if manages_projects:
+            msg_parts.append("manages one or more projects")
+        if is_div_head:
+            msg_parts.append("is a division head")
+        if is_dept_head:
+            msg_parts.append("is a department head")
+
+        # You can flash or render an error page; this is simple:
+        flash(f"Cannot delete employee #{employee_no}: employee " + ", ".join(msg_parts) +
+              ". Reassign these roles first.", "danger")
+        return redirect(url_for("employees.list_employees"))
+
+    # ---- DELETE "child" records that reference Employee_No ----
+    Works_On.query.filter_by(Employee_No=employee_no).delete()
+
+    # If you have hourly project employees table:
     try:
-        db.session.commit()
+        ProjectEmployee.query.filter_by(Employee_No=employee_no).delete()
     except Exception:
-        db.session.rollback()
-        # optional: flash an error if there are FK constraints
+        pass  # ignore if your project doesn't have this model
+
+    # If you have time entries:
+    try:
+        TimeEntry.query.filter_by(Employee_No=employee_no).delete()
+    except Exception:
+        pass
+
+    # If you have payroll history:
+    try:
+        PayrollHistory.query.filter_by(Employee_No=employee_no).delete()
+    except Exception:
+        pass
+
+    # ---- Now delete the employee itself ----
+    db.session.delete(emp)
+    db.session.commit()
+
+    flash(f"Employee #{employee_no} deleted.", "success")
     return redirect(url_for("employees.list_employees"))
