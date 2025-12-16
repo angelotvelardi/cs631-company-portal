@@ -1,6 +1,6 @@
 # routes/projects.py
 from flask import Blueprint, render_template, request, redirect, url_for
-from models import db, Project, Department, Employee
+from models import db, Project, Department, Employee, Works_On
 from datetime import datetime
 
 bp = Blueprint("projects", __name__, url_prefix="/projects")
@@ -30,6 +30,7 @@ def create_project():
         end_date_str = request.form.get("Date_Ended", "").strip()
         dept_name = request.form.get("Department_Name")
         manager_emp_no = request.form.get("Manager_Emp_No")
+        team = request.form.getlist("Team_Employee_Nos")
 
         if not proj_no_str or not dept_name or not manager_emp_no:
             return render_template(
@@ -90,6 +91,23 @@ def create_project():
         )
         db.session.add(project)
         db.session.commit()
+
+        if str(manager_emp_no) not in team:
+            team.append(str(manager_emp_no))
+
+        for emp_no_str in team:
+            wo = Works_On(
+                Employee_No=int(emp_no_str),
+                Project_Number=project.Project_Number,
+                Time_Spent=None,
+                Role=None
+            )
+            existing = Works_On.query.get((wo.Employee_No, wo.Project_Number))
+            if not existing:
+                db.session.add(wo)
+
+        db.session.commit()
+
         return redirect(url_for("projects.list_projects"))
 
     return render_template("projects/create.html", departments=departments, employees=employees)

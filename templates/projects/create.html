@@ -49,6 +49,16 @@
     </select>
   </div>
 
+  <div class="mb-3">
+    <label class="form-label">Project Team (multi-select)</label>
+    <select class="form-select" name="Team_Employee_Nos" multiple size="8">
+      {% for e in employees %}
+        <option value="{{ e.Employee_No }}">{{ e.Employee_Name }} (#{{ e.Employee_No }})</option>
+      {% endfor %}
+    </select>
+    <div class="form-text">Hold Ctrl (Windows) / Cmd (Mac) to select multiple.</div>
+  </div>
+
   <button type="submit" class="btn btn-primary">Create</button>
   <a href="{{ url_for('projects.list_projects') }}" class="btn btn-secondary">Cancel</a>
 </form>

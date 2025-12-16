@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Milestones{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Milestones (Project #{{ project.Project_Number }})</h1>
+  <a class="btn btn-primary" href="{{ url_for('milestones.create_milestone', project_number=project.Project_Number) }}">+ Add Milestone</a>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Status</th>
+      <th>Due</th>
+      <th>Completed</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in milestones %}
+      <tr>
+        <td>{{ m.Title }}</td>
+        <td>{{ m.Status }}</td>
+        <td>{{ m.Due_Date or '-' }}</td>
+        <td>{{ m.Completed_Date or '-' }}</td>
+        <td class="d-flex gap-2">
+          <a class="btn btn-sm btn-secondary"
+             href="{{ url_for('milestones.edit_milestone', project_number=project.Project_Number, milestone_id=m.Milestone_ID) }}">
+            Edit
+          </a>
+          <form method="post"
+                action="{{ url_for('milestones.delete_milestone', project_number=project.Project_Number, milestone_id=m.Milestone_ID) }}"
+                onsubmit="return confirm('Delete this milestone?');">
+            <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="btn btn-secondary" href="{{ url_for('project_stats.stats', project_number=project.Project_Number) }}">Back to Stats</a>
+{% endblock %}

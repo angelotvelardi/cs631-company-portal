@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Project Stats{% endblock %}
+{% block content %}
+<h1>Project Stats: #{{ project.Project_Number }}</h1>
+
+<ul class="list-group mb-3">
+  <li class="list-group-item"><strong>Team members:</strong> {{ team_count }}</li>
+  <li class="list-group-item"><strong>Total person-hours:</strong> {{ total_hours }}</li>
+  <li class="list-group-item"><strong>Milestones total:</strong> {{ total_milestones }}</li>
+  <li class="list-group-item"><strong>Milestones completed:</strong> {{ completed_milestones }}</li>
+  <li class="list-group-item"><strong>Milestones remaining:</strong> {{ remaining_milestones }}</li>
+</ul>
+
+<div class="d-flex gap-2">
+  <a class="btn btn-secondary" href="{{ url_for('projects.list_projects') }}">Back</a>
+  <a class="btn btn-primary" href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">Manage Milestones</a>
+</div>
+{% endblock %}

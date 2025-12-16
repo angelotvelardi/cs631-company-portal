@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Edit Milestone{% endblock %}
+{% block content %}
+<h1>Edit Milestone (Project #{{ project.Project_Number }})</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Title</label>
+    <input class="form-control" name="Title" value="{{ milestone.Title }}" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Description</label>
+    <textarea class="form-control" name="Description" rows="3">{{ milestone.Description or '' }}</textarea>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Status</label>
+    <select class="form-select" name="Status">
+      {% for s in statuses %}
+        <option value="{{ s }}" {% if milestone.Status == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Due Date</label>
+    <input type="date" class="form-control" name="Due_Date" value="{{ milestone.Due_Date }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Completed Date</label>
+    <input type="date" class="form-control" name="Completed_Date" value="{{ milestone.Completed_Date }}">
+  </div>
+
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">Cancel</a>
+</form>
+{% endblock %}

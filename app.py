@@ -13,6 +13,8 @@ from routes.titles import bp as titles_bp
 from routes.hr.project_employees import bp as project_employees_bp
 from routes.hr.time_entries import bp as time_entries_bp
 from routes.hr.payroll import bp as payroll_bp
+from routes.project_management.project_stats import bp as project_stats_bp
+from routes.project_management.milestones import bp as milestones_bp
 
 
 
@@ -38,6 +40,8 @@ def create_app():
     app.register_blueprint(project_employees_bp)
     app.register_blueprint(time_entries_bp)
     app.register_blueprint(payroll_bp)
+    app.register_blueprint(project_stats_bp)
+    app.register_blueprint(milestones_bp)
 
 
     @app.route("/")
