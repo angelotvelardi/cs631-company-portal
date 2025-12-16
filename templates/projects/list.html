@@ -32,6 +32,10 @@
           <td>{{ project.Date_Started }}</td>
           <td>{{ project.Date_Ended or '-' }}</td>
           <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-warning"
+              href="{{ url_for('projects.edit_project', project_number=project.Project_Number) }}">
+              Edit
+            </a>
             <a class="btn btn-sm btn-info"
               href="{{ url_for('project_stats.stats', project_number=project.Project_Number) }}">
               Stats
@@ -40,6 +44,11 @@
               href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">
               Milestones
             </a>
+            <form method="post"
+                  action="{{ url_for('projects.delete_project', project_number=project.Project_Number) }}"
+                  onsubmit="return confirm('Delete project #{{ project.Project_Number }}?');">
+              <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+            </form>
           </td>
         </tr>
       {% endfor %}

@@ -1,6 +1,6 @@
 # routes/projects.py
 from flask import Blueprint, render_template, request, redirect, url_for
-from models import db, Project, Department, Employee, Works_On
+from models import db, Project, Department, Employee, Works_On, TimeEntry, ProjectMilestone
 from datetime import datetime
 
 bp = Blueprint("projects", __name__, url_prefix="/projects")
@@ -180,9 +180,13 @@ def edit_project(project_number):
 @bp.route("/<int:project_number>/delete", methods=["POST"])
 def delete_project(project_number):
     proj = Project.query.get_or_404(project_number)
+
+    # Delete dependent rows first to avoid FK constraint errors
+    Works_On.query.filter_by(Project_Number=project_number).delete()
+    TimeEntry.query.filter_by(Project_Number=project_number).delete()
+    ProjectMilestone.query.filter_by(Project_Number=project_number).delete()
+
     db.session.delete(proj)
-    try:
-        db.session.commit()
-    except Exception:
-        db.session.rollback()
+    db.session.commit()
     return redirect(url_for("projects.list_projects"))
+
