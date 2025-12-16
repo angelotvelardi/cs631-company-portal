@@ -23,23 +23,26 @@
       </tr>
     </thead>
     <tbody>
-      {% for project in projects %}
-      <tr>
-        <td>{{ project.Project_Number }}</td>
-        <td>
-          <a class="btn btn-sm btn-info"
-            href="{{ url_for('project_stats.stats', project_number=project.Project_Number) }}">
-            Stats
-          </a>
-
-          <a class="btn btn-sm btn-secondary"
-            href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">
-            Milestones
-          </a>
-        </td>
-      </tr>
+      {% for project, department, manager in projects %}
+        <tr>
+          <td>{{ project.Project_Number }}</td>
+          <td>{{ department.Department_Name }}</td>
+          <td>{{ manager.Employee_Name }} (#{{ manager.Employee_No }})</td>
+          <td>{{ project.Budget }}</td>
+          <td>{{ project.Date_Started }}</td>
+          <td>{{ project.Date_Ended or '-' }}</td>
+          <td class="d-flex gap-2">
+            <a class="btn btn-sm btn-info"
+              href="{{ url_for('project_stats.stats', project_number=project.Project_Number) }}">
+              Stats
+            </a>
+            <a class="btn btn-sm btn-secondary"
+              href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">
+              Milestones
+            </a>
+          </td>
+        </tr>
       {% endfor %}
-
     </tbody>
   </table>
 {% else %}
