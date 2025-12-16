@@ -7,14 +7,6 @@
   <a class="btn btn-primary" href="{{ url_for('projects.create_project') }}">
     + New Project
   </a>
-  <a class="btn btn-sm btn-info"
-   href="{{ url_for('project_stats.stats', project_number=project.Project_Number) }}">
-    Stats
-  </a>
-  <a class="btn btn-sm btn-secondary"
-    href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">
-    Milestones
-  </a>
 </div>
 
 {% if projects %}
