@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Edit Time Entry{% endblock %}
+{% block content %}
+<h1>Edit Time Entry #{{ te.Time_Entry_ID }}</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Employee</label>
+    <select class="form-select" name="Employee_No" required>
+      {% for e in employees %}
+        <option value="{{ e.Employee_No }}" {% if te.Employee_No == e.Employee_No %}selected{% endif %}>
+          {{ e.Employee_Name }} (#{{ e.Employee_No }})
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Project</label>
+    <select class="form-select" name="Project_Number" required>
+      {% for p in projects %}
+        <option value="{{ p.Project_Number }}" {% if te.Project_Number == p.Project_Number %}selected{% endif %}>
+          {{ p.Project_Number }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Work Date</label>
+    <input type="date" class="form-control" name="Work_Date" value="{{ te.Work_Date }}" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Hours</label>
+    <input type="number" step="0.25" class="form-control" name="Hours" value="{{ te.Hours }}" required>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-secondary" href="{{ url_for('time_entries.list_time_entries') }}">Cancel</a>
+</form>
+{% endblock %}

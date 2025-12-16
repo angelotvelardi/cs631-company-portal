@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Payroll History{% endblock %}
+{% block content %}
+<h1>Payroll History</h1>
+
+<form method="get" class="row g-2 mb-3">
+  <div class="col-auto">
+    <input class="form-control" type="number" name="year" placeholder="Year" value="{{ year or '' }}">
+  </div>
+  <div class="col-auto">
+    <input class="form-control" type="number" name="month" placeholder="Month" min="1" max="12" value="{{ month or '' }}">
+  </div>
+  <div class="col-auto">
+    <button class="btn btn-secondary" type="submit">Filter</button>
+  </div>
+</form>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Employee</th>
+      <th>Period</th>
+      <th>Type</th>
+      <th>Gross</th>
+      <th>Fed</th>
+      <th>State</th>
+      <th>Other</th>
+      <th>Net</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ph, emp in rows %}
+      <tr>
+        <td>{{ emp.Employee_Name }} (#{{ emp.Employee_No }})</td>
+        <td>{{ ph.Pay_Year }}-{{ "%02d"|format(ph.Pay_Month) }}</td>
+        <td>{{ ph.Rate_Type }}</td>
+        <td>{{ ph.Gross_Pay }}</td>
+        <td>{{ ph.Federal_Tax }}</td>
+        <td>{{ ph.State_Tax }}</td>
+        <td>{{ ph.Other_Tax }}</td>
+        <td><strong>{{ ph.Net_Pay }}</strong></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

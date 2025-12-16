@@ -1,5 +1,6 @@
 # models.py
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -123,3 +124,52 @@ class Works_On(db.Model):
     )
     Time_Spent = db.Column(db.Numeric(10, 2))
     Role = db.Column(db.String(100))
+
+class ProjectEmployee(db.Model):
+    __tablename__ = "Project_Employee"
+    Employee_No = db.Column(db.Integer, db.ForeignKey("Employee.Employee_No"), primary_key=True)
+    Project_Number = db.Column(db.Integer, db.ForeignKey("Project.Project_Number"), nullable=False)
+    Hourly_Rate = db.Column(db.Numeric(10, 2), nullable=False)
+    Start_Date = db.Column(db.Date, nullable=False)
+    End_Date = db.Column(db.Date, nullable=True)
+
+class TimeEntry(db.Model):
+    __tablename__ = "Time_Entry"
+    Time_Entry_ID = db.Column(db.Integer, primary_key=True)
+    Employee_No = db.Column(db.Integer, db.ForeignKey("Employee.Employee_No"), nullable=False)
+    Project_Number = db.Column(db.Integer, db.ForeignKey("Project.Project_Number"), nullable=False)
+    Work_Date = db.Column(db.Date, nullable=False)
+    Hours = db.Column(db.Numeric(6, 2), nullable=False)
+
+class PayrollHistory(db.Model):
+    __tablename__ = "Payroll_History"
+    Payroll_ID = db.Column(db.Integer, primary_key=True)
+    Employee_No = db.Column(db.Integer, db.ForeignKey("Employee.Employee_No"), nullable=False)
+
+    Pay_Year = db.Column(db.Integer, nullable=False)
+    Pay_Month = db.Column(db.Integer, nullable=False)
+
+    Gross_Pay = db.Column(db.Numeric(12, 2), nullable=False)
+    Federal_Tax = db.Column(db.Numeric(12, 2), nullable=False)
+    State_Tax = db.Column(db.Numeric(12, 2), nullable=False)
+    Other_Tax = db.Column(db.Numeric(12, 2), nullable=False)
+    Net_Pay = db.Column(db.Numeric(12, 2), nullable=False)
+
+    Rate_Type = db.Column(db.String(20), nullable=False)   # 'SALARY' or 'HOURLY'
+    Base_Rate_Used = db.Column(db.Numeric(12, 2), nullable=True)
+
+    Created_At = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint("Employee_No", "Pay_Year", "Pay_Month", name="uq_payroll_period"),
+    )
+
+class ProjectMilestone(db.Model):
+    __tablename__ = "Project_Milestone"
+    Milestone_ID = db.Column(db.Integer, primary_key=True)
+    Project_Number = db.Column(db.Integer, db.ForeignKey("Project.Project_Number"), nullable=False)
+    Title = db.Column(db.String(150), nullable=False)
+    Description = db.Column(db.Text, nullable=True)
+    Status = db.Column(db.String(30), nullable=False, default="Not Started")
+    Due_Date = db.Column(db.Date, nullable=True)
+    Completed_Date = db.Column(db.Date, nullable=True)

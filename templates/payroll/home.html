@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Payroll{% endblock %}
+{% block content %}
+<h1>Payroll</h1>
+
+<div class="d-flex gap-2">
+  <a class="btn btn-primary" href="{{ url_for('payroll.run_payroll') }}">Run Monthly Payroll</a>
+  <a class="btn btn-secondary" href="{{ url_for('payroll.history') }}">View Payroll History</a>
+</div>
+{% endblock %}

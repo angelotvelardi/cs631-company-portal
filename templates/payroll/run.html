@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Run Payroll{% endblock %}
+{% block content %}
+<h1>Run Monthly Payroll</h1>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Year</label>
+    <input type="number" class="form-control" name="Pay_Year" placeholder="2025" required>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Month</label>
+    <input type="number" class="form-control" name="Pay_Month" min="1" max="12" placeholder="12" required>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Generate Payroll</button>
+  <a class="btn btn-secondary" href="{{ url_for('payroll.payroll_home') }}">Cancel</a>
+</form>
+{% endblock %}
