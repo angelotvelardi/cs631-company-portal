@@ -31,29 +31,23 @@
       </tr>
     </thead>
     <tbody>
-      {% for proj, dept, mgr in projects %}
-        <tr>
-          <td>{{ proj.Project_Number }}</td>
-          <td>{{ dept.Department_Name }}</td>
-          <td>{{ mgr.Employee_Name }}</td>
-          <td>{{ proj.Budget or '-' }}</td>
-          <td>{{ proj.Date_Started or '-' }}</td>
-          <td>{{ proj.Date_Ended or '-' }}</td>
-          <td class="d-flex gap-2">
-            <a class="btn btn-sm btn-secondary"
-               href="{{ url_for('projects.edit_project', project_number=proj.Project_Number) }}">
-              Edit
-            </a>
-            <form method="post"
-                  action="{{ url_for('projects.delete_project', project_number=proj.Project_Number) }}"
-                  onsubmit="return confirm('Delete this project?');">
-              <button type="submit" class="btn btn-sm btn-danger">
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
+      {% for project in projects %}
+      <tr>
+        <td>{{ project.Project_Number }}</td>
+        <td>
+          <a class="btn btn-sm btn-info"
+            href="{{ url_for('project_stats.stats', project_number=project.Project_Number) }}">
+            Stats
+          </a>
+
+          <a class="btn btn-sm btn-secondary"
+            href="{{ url_for('milestones.list_milestones', project_number=project.Project_Number) }}">
+            Milestones
+          </a>
+        </td>
+      </tr>
       {% endfor %}
+
     </tbody>
   </table>
 {% else %}
